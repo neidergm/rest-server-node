@@ -39,7 +39,6 @@ let userSchema = new Schema({
         type: Boolean,
         required: false,
         default: true
-
     },
     google: {
         type: Boolean,

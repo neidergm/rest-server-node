@@ -4,16 +4,24 @@ const bcrypt = require('bcrypt');
 const _ = require("underscore");
 const User = require("../models/user");
 
+const { verifyToken, verifyAdmin_Role } = require("../middlewares/authorization");
+
 const app = express();
 
 // URIs user
 
-app.get("/user", (req, resp) => {
+app.get("/user", verifyToken, (req, resp) => {
+
+    user = {
+        data: req.user,
+        name: req.user.name,
+        email: req.user.email
+    }
 
     let begin = Number(req.query.begin || 0);
     let limit = Number(req.query.limit || 5);
 
-    User.find({status: true}, 'name email img google status role')
+    User.find({ status: true }, 'name email img google status role')
         .skip(begin)
         .limit(limit)
         .exec((error, response) => {
@@ -24,7 +32,7 @@ app.get("/user", (req, resp) => {
                 });
             }
 
-            User.count({status: true}, (error, quantity) => {
+            User.count({ status: true }, (error, quantity) => {
                 resp.json({
                     ok: true,
                     users: response,
@@ -33,8 +41,6 @@ app.get("/user", (req, resp) => {
             });
 
         });
-
-
 });
 
 app.post("/user", (req, resp) => {
@@ -60,14 +66,14 @@ app.post("/user", (req, resp) => {
     });
 });
 
-app.put("/user/:id", (req, resp) => {
+app.put("/user/:id", [verifyToken, verifyAdmin_Role], (req, resp) => {
 
     let id = req.params.id;
 
     // campos actualizables
     let data = _.pick(req.body, ['name', 'email', 'img', 'status', 'role']);
 
-    User.findIdAndUpdate(id, data, { new: true, runValidators: true }, (error, response) => {
+    User.findOneAndUpdate(id, data, { new: true, runValidators: true }, (error, response) => {
         if (error) {
             return resp.status(400).json({
                 ok: false,
@@ -80,11 +86,11 @@ app.put("/user/:id", (req, resp) => {
 
 });
 
-app.delete("/user/:id", (req, resp) => {
+app.delete("/user/:id", verifyToken, (req, resp) => {
 
     let id = req.params.id;
 
-    User.findByIdAndUpdate(id, {status: false}, (error, response) => {
+    User.findByIdAndUpdate(id, { status: false }, (error, response) => {
         if (error) {
             return resp.status(400).json({
                 ok: false,

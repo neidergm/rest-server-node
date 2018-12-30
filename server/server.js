@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //  URIs
-app.use(require("./routes/user.js"));
+app.use(require("./routes/index"));
 
 // MongoDB Connection
 mongoose.connect(process.env.URLDB, { useNewUrlParser: true }, (err, resp) => {
