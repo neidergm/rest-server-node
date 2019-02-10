@@ -27,6 +27,12 @@ process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 process.env.TOKEN_SEED = process.env.TOKEN_SEED || "token-seed-development";
 
 // =========================
+// Google Client Id
+// =========================
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || "361094489142-1s8fnp8jbme31qdr43u2chaa54k8v4ck.apps.googleusercontent.com";
+
+// =========================
 // DATA BASE
 // =========================
 

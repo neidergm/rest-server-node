@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user');
 const app = express();
 
+// const { OAuth2Client } = require('google-auth-library');
+// const client = new OAuth2Client(process.env.CLIENT_ID);
+
 app.post("/login", (req, resp) => {
 
     let body = req.body;
@@ -46,5 +49,5 @@ app.post("/login", (req, resp) => {
     });
 });
 
-module.exports = app;
 
+module.exports = app;
